@@ -1,0 +1,99 @@
+const webpack = require('webpack')
+const path = require('path');
+const constant = require('./config/constant'); // 引入常量文件
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackplugin = require('html-webpack-plugin');
+
+module.exports = {
+    mode: 'development', // 指定开发者打包模式
+    entry: './src/main.js', //入口文件
+    output: { //输出文件
+        filename: 'index.js', //输出文件名
+        path: __dirname + '/public' //输出文件路径
+    },
+    //设置开发者工具的端口号,不设置则默认为8080端口
+    devServer: { //"webpack-dev-server
+        // inline: false,
+        port: 8010,
+        // hot: true,
+    },
+    module: {
+        rules: [{ /*将js或者jsx文件转码成es5*/
+                test: /\.jsx?$/, // 正则惰性匹配后缀名为js或者jsx的文件
+                exclude: /node_modules/, //排除这个文件夹
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
+                test: /\.vue$/,
+                use: [{
+                        loader: 'cache-loader'
+                    },
+                    {
+                        loader: 'thread-loader'
+                    },
+                    {
+                        loader: 'vue-loader',
+                        options: {
+                            compilerOptions: {
+                                preserveWhitespace: false
+                            },
+                        }
+                    }
+                ]
+            },
+            // ...
+            {
+                test: /\.(scss|sass)$/,
+                use: [{
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            implementation: require('dart-sass')
+                        }
+                    },
+                    // {
+                    //     loader: 'postcss-loader',
+                    //     options: {
+                    //         plugins: [//报错'plugins'
+                    //             require("autoprefixer") /*自动添加前缀*/
+                    //         ]
+                    //     }
+                    // }
+                ]
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000
+                    }
+                }]
+            }
+            // ...
+
+        ]
+    },
+    plugins: [
+        new webpack.DefinePlugin({ // 定义全局变量
+            CONSTANT: JSON.stringify(constant) //通过 webpack提供的DefinePlugin插件，可以很方便的定义环境变量
+        }),
+        new HtmlWebpackplugin({
+            filename: 'index.html', // 打包后的文件名，默认是index.html
+            template: path.resolve(__dirname, 'index.html') // 导入被打包的文件模板
+        }),
+        // new webpack.HotModuleReplacementPlugin(),
+        new VueLoaderPlugin(),
+
+    ]
+}

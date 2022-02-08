@@ -1,0 +1,37 @@
+(webpack.config.js1)改为webpack.config.js再npm run dev1或npm run build1
+
+设置package.json的scripts的"build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js",
+然后浏览器打开file:///C:/Users/17812/Desktop/b/public/index.html#/page2
+
+设置package.json的"dev": "cross-env NODE_ENV=development webpack-dev-server"
+然后浏览器打开 http://localhost:8080/
+
+这些都是打包的
+  "build1": "webpack --config ./webpack.config.js",
+  "ta": "cross-env NODE_ENV=production webpack --config ./webpack.dev.js",
+  "tb": "cross-env NODE_ENV=production webpack --config ./config/webpack.dev.js"
+
+
+  注：1、从webpack-merge5.0.3 及更高版本开始，则需要使用：const {merge} = require('webpack-merge');
+   2、如果版本低于5.0.3，则需要使用：const merge = require('webpack-merge');
+
+
+https://blog.csdn.net/a419419/article/details/80947277
+npm init -y
+npm install webpack -D
+npm install -D webpack-cli
+npm install babel-loader @babel/core @babel/preset-env -D
+npm install html-webpack-plugin -D
+npm install vue-loader vue-template-compiler cache-loader thread-loader -D
+npm install vue -S
+npm install webpack-dev-server -D
+npm install vue-router --save
+
+npm install sass-loader dart-sass css-loader style-loader file-loader url-loader postcss-loader autoprefixer -D
+npm install cross-env -D
+npm i @intervolga/optimize-cssnano-plugin mini-css-extract-plugin clean-webpack-plugin webpack-merge copy-webpack-plugin -D
+
+
+如果webpack.config.js文件没有这个devServer，项目在浏览器运行http://localhost:8081/显示了/public/index.html
+如果webpack.config.js文件没有这个devServer，项目在浏览器运行http://localhost:8010/#/page2（能显示App.vue的内容）
+注：两个webpack.config.js一个能显示App.vue的内容，另外一个在浏览器运行，显示了/public/index.html
